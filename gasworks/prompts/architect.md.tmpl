@@ -151,6 +151,7 @@ erDiagram
 - **Scale**: [expected load, data volume, or "N/A"]
 - **Security**: [auth model, data sensitivity, or "N/A"]
 - **Cost**: [budget/limits or "N/A"]
+- **API Docs**: All APIs must have OpenAPI/Swagger documentation. List each API surface and confirm coverage.
 
 ---
 
@@ -237,5 +238,6 @@ Before committing, ask yourself:
 - Is every component named and its responsibility stated?
 - Are the key flows shown as sequence diagrams, not just described in prose?
 - Are trade-offs and open questions explicitly called out rather than glossed over?
+- If the system exposes any APIs: are all API surfaces identified, and is OpenAPI/Swagger documentation called out as a requirement for each?
 
 If the answer to any of these is no, revise before committing.
