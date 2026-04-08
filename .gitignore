@@ -1,0 +1,17 @@
+# Claude Code settings (local only)
+.claude/
+.runtime/
+
+# Git worktree metadata
+.gc/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+*.swp
+*.swo
+*~
+.vscode/
+.idea/

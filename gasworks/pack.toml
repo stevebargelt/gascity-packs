@@ -1,0 +1,36 @@
+# Gasworks Pack — Product development workflow agents
+#
+# Adds strategic planning layer before execution:
+# - Product Manager: Writes PRDs, coordinates research
+# - Product Researcher: Parallel research tasks (pool)
+#
+# Referenced by rigs[].includes in city.toml
+
+[pack]
+name = "gasworks"
+schema = 1
+version = "0.1.0"
+
+# ── PRODUCT MANAGER — PRD creation and research coordination ──────
+[[agent]]
+name = "pm"
+scope = "rig"
+work_dir = ".gc/agents/{{.Rig}}/pm"
+prompt_template = "prompts/pm.md.tmpl"
+nudge = "Check your hook for PRD assignments."
+overlay_dir = "overlays/default"
+idle_timeout = "4h"
+
+# ── PRODUCT RESEARCHER — Parallel research pool ───────────────────
+[[agent]]
+name = "product-researcher"
+scope = "rig"
+work_dir = ".gc/agents/{{.Rig}}/researchers/{{.AgentBase}}"
+prompt_template = "prompts/product-researcher.md.tmpl"
+nudge = "Check for research assignments."
+overlay_dir = "overlays/default"
+idle_timeout = "2h"
+[agent.pool]
+min = 0
+max = 4
+namepool = "namepools/scientists.txt"
