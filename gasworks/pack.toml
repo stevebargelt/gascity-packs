@@ -4,13 +4,14 @@
 # - Product Manager: Writes PRDs, coordinates research
 # - Product Researcher: Parallel research tasks (pool)
 # - Architect: System design, architecture docs (singleton)
+# - Project Orchestrator: Phased project planning, bead backlog creation (singleton)
 #
 # Referenced by rigs[].includes in city.toml
 
 [pack]
 name = "gasworks"
 schema = 1
-version = "0.2.0"
+version = "0.3.0"
 
 # ── PRODUCT MANAGER — PRD creation and research coordination ──────
 [[agent]]
@@ -43,5 +44,15 @@ scope = "rig"
 work_dir = ".gc/agents/{{.Rig}}/architect"
 prompt_template = "prompts/architect.md.tmpl"
 nudge = "Check for architecture assignments."
+overlay_dir = "overlays/default"
+idle_timeout = "4h"
+
+# ── PROJECT ORCHESTRATOR — Phased planning and bead backlog creation ──
+[[agent]]
+name = "orchestrator"
+scope = "rig"
+work_dir = ".gc/agents/{{.Rig}}/orchestrator"
+prompt_template = "prompts/orchestrator.md.tmpl"
+nudge = "Check for project planning assignments."
 overlay_dir = "overlays/default"
 idle_timeout = "4h"

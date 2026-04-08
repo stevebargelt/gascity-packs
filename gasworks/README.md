@@ -3,7 +3,7 @@
 Product development workflow pack for Gas City. Adds a strategic planning layer — PM, Researcher, Architect — between human intent and polecat execution.
 
 **Repo**: [github.com/stevebargelt/gascity-packs](https://github.com/stevebargelt/gascity-packs)
-**Current version**: 0.2.0
+**Current version**: 0.3.0
 
 ---
 
@@ -27,14 +27,21 @@ Product development workflow pack for Gas City. Adds a strategic planning layer 
 - **Role**: Reads approved PRD + research docs, designs system architecture, produces architecture doc with Mermaid diagrams, mails crew for review
 - **Outputs**: `docs/architecture/<bead-id>.md`
 
+### Project Orchestrator
+- **Type**: Singleton per rig
+- **Trigger**: Crew manually assigns architecture-approved bead to `<rig>/orchestrator`
+- **Role**: Reads PRD + architecture doc, produces a phased project plan with sequencing, dependencies, and explicit human-required steps; on plan approval creates the full child bead backlog
+- **Outputs**: `docs/plans/<bead-id>.md`, child beads labeled `needs-human` or `pool:<rig>/polecat`
+
 ---
 
 ## Human-in-the-Loop Gates
 
 | Gate | After | Before | Who reviews |
 |------|-------|--------|-------------|
-| PRD Review | PM writes PRD | Architect receives work | Crew + human |
-| Architecture Review | Architect writes arch doc | Polecats execute | Crew + human |
+| Gate 1: PRD Review | PM writes PRD | Architect receives work | Crew + human |
+| Gate 2: Architecture Review | Architect writes arch doc | Orchestrator receives work | Crew + human |
+| Gate 3: Plan Review | Orchestrator writes project plan | Beads are created | Crew + human |
 
 Gates are enforced by convention: agents mail crew and wait. No work auto-advances past a gate.
 
@@ -68,11 +75,25 @@ gc nudge <rig>/architect "PRD approved, architecture needed: <bead-id>"
 ### Architect → Crew (architecture review)
 Architect sends mail + nudge to crew automatically when architecture doc is complete.
 
-### Crew approves architecture → Polecats
+### Crew approves architecture → Orchestrator
 ```bash
-# Create child beads from work breakdown, sling to polecats
-bd create "Implement SSE endpoint" --parent <bead-id> -t task
-gc sling <rig>/polecat <child-bead-id>
+# Assign to orchestrator and nudge
+bd update <bead-id> --assignee <rig>/orchestrator
+gc nudge <rig>/orchestrator "Architecture approved, planning needed: <bead-id>"
+```
+
+### Orchestrator → Crew (plan review)
+Orchestrator sends mail + nudge to crew when project plan is complete.
+
+### Crew approves plan → Orchestrator creates beads
+Crew replies with approval; orchestrator creates all child beads (automated + manual steps).
+
+### Crew dispatches
+```bash
+# Action manual steps, then sling automated beads to polecats
+# (Orchestrator has already labeled them pool:<rig>/polecat)
+bd list --parent <bead-id> --label needs-human   # action these first
+bd list --parent <bead-id> --label pool:<rig>/polecat  # dispatch these
 ```
 
 ---
