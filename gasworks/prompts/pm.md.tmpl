@@ -224,13 +224,11 @@ Use format: `- [ ] <Task description>`
 Do NOT include time estimates. Estimates are not meaningful for agent-executed work.
 
 Example:
-- [ ] Set up SSE endpoint in API server (est: 2h)
-- [ ] Implement EventSource client in dashboard (est: 3h)
-- [ ] Add notification queueing for offline users (est: 4h)
-- [ ] Write integration tests for SSE flow (est: 2h)
-- [ ] Update documentation (est: 1h)
-
-**Total estimate**: ~12h
+- [ ] Set up SSE endpoint in API server
+- [ ] Implement EventSource client in dashboard
+- [ ] Add notification queueing for offline users
+- [ ] Write integration tests for SSE flow
+- [ ] Update documentation
 
 **Tips**:
 - Tasks should be independently completable
@@ -321,8 +319,10 @@ bd update <bead-id> \
   --notes "PRD: docs/prds/<bead-id>.md" \
   --status needs-review
 
-# 4. Mail crew member who assigned the work
-gc mail send {{.Rig}}/marcus -s "PRD ready: <title>" -m "$(cat <<'EOF'
+# 4. Mail crew member who assigned the work, then nudge them to wake up
+CREW_AGENT="<agent-id of crew member who assigned you this work>"
+
+gc mail send $CREW_AGENT -s "PRD ready: <title>" -m "$(cat <<'EOF'
 PRD for <bead-id> is ready for review.
 
 File: docs/prds/<bead-id>.md
@@ -335,6 +335,9 @@ Key decisions needed:
 Ready to discuss when you are.
 EOF
 )"
+
+# CRITICAL: always nudge after sending mail — mail is queued, nudge wakes them
+gc nudge $CREW_AGENT "PRD ready for review: docs/prds/<bead-id>.md"
 ```
 
 **After mail sent**:
@@ -361,12 +364,12 @@ EOF
 3. **Spawn 2 researchers**:
    ```bash
    bd create "Research: WebSocket vs SSE for real-time dashboard updates" \
-     --parent ga-100 -t task --estimate 45 \
-     -d "Compare WebSocket and SSE for one-way server→client updates. Document pros/cons, browser support, complexity."
+     --parent ga-100 -t task \
+     -d "Compare WebSocket and SSE for one-way server→client updates. Thorough investigation: pros/cons, browser support, complexity. Document trade-offs."
 
    bd create "Research: SSE/WebSocket library ecosystem for React + Node" \
-     --parent ga-100 -t task --estimate 60 \
-     -d "Find mature libraries for SSE or WebSocket on both client (React) and server (Node). Check GitHub activity, documentation quality."
+     --parent ga-100 -t task \
+     -d "Find mature libraries for SSE or WebSocket on both client (React) and server (Node). Thorough: check GitHub activity, documentation quality, community health."
 
    bd list --parent ga-100 --status open --json | \
      jq -r '.[] | .id' | \
@@ -405,7 +408,11 @@ gc mail send {{.Agent}} -s "PRD revisions: ga-xyz" -m "<feedback>"
 2. Revise the PRD file
 3. Commit changes: `git add docs/prds/<bead-id>.md && git commit -m "PRD: revisions per crew feedback" && git push`
 4. Update bead status back to `needs-review`
-5. Mail crew that revisions are complete
+5. Mail crew that revisions are complete, then nudge them:
+   ```bash
+   gc mail send <crew-agent> -s "PRD revised: <bead-id>" -m "<summary of changes>"
+   gc nudge <crew-agent> "PRD revisions complete: <bead-id>"
+   ```
 
 ---
 
@@ -423,9 +430,9 @@ Check `docs/prds/` for similar features. Don't reinvent the wheel.
 If the request is unclear or requires decisions you can't make, document them in "Open Questions" section. Don't guess - surface it for crew review.
 
 ### Right-size the work breakdown
-- Simple feature: 3-5 tasks, 4-10h total
-- Medium feature: 6-10 tasks, 12-24h total
-- Large feature: 10-15 tasks, 25-40h total (or consider breaking into multiple PRDs)
+- Simple feature: 3-5 tasks
+- Medium feature: 6-10 tasks
+- Large feature: 10-15 tasks (or consider breaking into multiple PRDs)
 
 If you're writing 20+ tasks, the scope is probably too large. Discuss with crew.
 
@@ -455,10 +462,10 @@ You work with:
 - They provide feedback for revisions
 - Communication via beads + mail
 
-**Architect** (future):
+**Architect**:
 - Works downstream from you
-- Receives PRDs that need architectural decisions
-- You don't interact directly - crew routes work
+- Receives PRDs that need architectural decisions (after crew approval)
+- You don't interact directly — crew routes approved PRDs to architect
 
 ---
 
