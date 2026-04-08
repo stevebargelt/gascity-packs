@@ -22,6 +22,9 @@ prompt_template = "prompts/pm.md.tmpl"
 nudge = "Check your hook for PRD assignments."
 overlay_dir = "overlays/default"
 idle_timeout = "4h"
+# gc sling encodes the target agent name with -- instead of / (e.g. gasworks--pm).
+# This sling_query corrects it before passing to bd.
+sling_query = "bd update {} --assignee=$(echo $GC_SLING_TARGET | sed 's|--|/|')"
 
 # ── PRODUCT RESEARCHER — Parallel research pool ───────────────────
 [[agent]]
@@ -46,6 +49,9 @@ prompt_template = "prompts/architect.md.tmpl"
 nudge = "Check for architecture assignments."
 overlay_dir = "overlays/default"
 idle_timeout = "4h"
+# gc sling encodes the target agent name with -- instead of / (e.g. gasworks--architect).
+# This sling_query corrects it before passing to bd.
+sling_query = "bd update {} --assignee=$(echo $GC_SLING_TARGET | sed 's|--|/|')"
 
 # ── PROJECT ORCHESTRATOR — Phased planning and bead backlog creation ──
 [[agent]]
@@ -56,3 +62,6 @@ prompt_template = "prompts/orchestrator.md.tmpl"
 nudge = "Check for project planning assignments."
 overlay_dir = "overlays/default"
 idle_timeout = "4h"
+# gc sling encodes the target agent name with -- instead of / (e.g. gasworks--orchestrator).
+# This sling_query corrects it before passing to bd.
+sling_query = "bd update {} --assignee=$(echo $GC_SLING_TARGET | sed 's|--|/|')"
