@@ -47,6 +47,7 @@ session_live = [
 min = 0
 max = 4
 namepool = "namepools/scientists.txt"
+work_query = "bd ready --label=pool:{{.Rig}}/product-researcher --json --limit=1 2>/dev/null"
 
 # ── ARCHITECT — System design and architecture documentation ──────
 [[agent]]

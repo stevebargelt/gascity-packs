@@ -118,6 +118,7 @@ session_live = [
 min = 0
 max = 5
 namepool = "namepools/mad-max.txt"
+work_query = "bd ready --label=pool:{{.Rig}}/polecat --json --limit=1 2>/dev/null"
 
 # ── DOG — Infrastructure utility workers. Pool. Themed. ────────────────
 # Overrides maintenance's fallback dog with tmux theme and keybindings.
