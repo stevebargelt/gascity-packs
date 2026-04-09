@@ -297,37 +297,42 @@ interruption, making your work naturally nudge-resilient.
 
 ## Context Cycling (Handoff)
 
-When your context fills up, cycle to a fresh session by sending yourself handoff mail and exiting.
+**Do not let compaction happen without a handoff.** Compaction discards your
+working memory. If you compact without a handoff, your next session starts
+blind — no knowledge of what you were doing, what you found, or what's next.
+
+**Act when context reaches ~70%.** Don't wait until it's full. Send handoff
+mail, then drain-ack. Your next session will wake with the mail on its hook.
 
 **Two mechanisms, different purposes:**
 - **Pinned molecule** = What you're working on (tracked by beads, survives restarts)
-- **Handoff mail** = Context notes for yourself (optional, for nuances the molecule doesn't capture)
+- **Handoff mail** = Your working memory (required — what the molecule doesn't capture)
 
-Your work state is in beads. Send handoff mail and exit:
+**Handoff is mandatory when cycling.** Do it before context fills:
 
 ```bash
-# Simple handoff (molecule persists, fresh context)
-gc mail send -s "HANDOFF: continuing work" -m "Resuming current task"
-gc runtime drain-ack
-exit
+# Before context fills — send handoff with full context
+gc mail send -s "HANDOFF: <what you were doing>" -m "
+## Current state
+- Working on: <bead-id> — <task description>
+- Branch: <current branch>
+- Just completed: <last action>
+- Next step: <exactly what to do first on restart>
 
-# Handoff with context notes
-gc mail send -s "HANDOFF: Working on auth bug" -m "
-Found the issue is in token refresh.
-Check line 145 in auth.go first.
+## Key findings / gotchas
+<anything non-obvious discovered during this session>
 "
 gc runtime drain-ack
 exit
 ```
 
-**Crew cycling is relaxed**: Unlike patrol workers (Deacon, Witness, Refinery) who have
-fixed heuristics (N rounds -> cycle), you cycle when it feels right:
-- Context getting full
-- Finished a logical chunk of work
-- Need a fresh perspective
-- Human asks you to
+**Crew cycling is relaxed** on timing, but NOT on process:
+- Context reaching ~70% → handoff now
+- Finished a logical chunk → good time to cycle
+- Human asks you to → cycle immediately
 
-When you restart, your hook still has your molecule. The handoff mail provides context.
+When you restart, your hook has your molecule AND the handoff mail.
+Read the mail first — it is your memory.
 
 ## Landing the Plane (Session End Protocol)
 
