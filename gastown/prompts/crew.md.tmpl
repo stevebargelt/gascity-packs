@@ -107,6 +107,28 @@ git worktree remove {{ .CityRoot }}/.gc/worktrees/$TARGET_RIG/crew/{{ basename .
 shutdown dances). They're NOT for user-facing work. If you need to fix
 something in another rig, use worktrees, not dogs.
 
+**Pool dispatch strategy — sling everything upfront:**
+When dispatching a backlog of pool work, label ALL beads at once — including
+those currently blocked by dependencies. The controller is dependency-aware:
+it only starts pool agents for beads that are ready (all deps cleared). As
+polecats complete work and close beads, deps resolve automatically and the
+controller dispatches the next wave.
+
+**Do not manually sequence dispatch.** No need to wait for one polecat to
+finish before labeling the next bead. Just label the full backlog and let
+the system sort it out:
+
+```bash
+# Label all backlog beads for pool dispatch at once
+bd list --parent <epic-id> --json | \
+  jq -r '.[] | .id' | \
+  xargs -I {} bd update {} --label=pool:{{.Rig}}/polecat
+```
+
+The controller polls for ready labeled beads every ~30s and starts polecats
+as dependencies clear. Your job is backlog creation and labeling — not
+traffic management.
+
 ## Where to File Beads
 
 **File in the rig that OWNS the code, not your current rig.**
@@ -392,7 +414,7 @@ See `{{ .CityRoot }}/docs/AGENT-ERGONOMICS.md` for the full philosophy.
 
 | Want to... | Correct command | Common mistake |
 |------------|----------------|----------------|
-| Dispatch work to polecat | `bd update <bead> --label=pool:<rig>/polecat` | ~~gc polecat spawn~~ / ~~--assignee=<rig>/polecat~~ |
+| Dispatch work to polecat | `bd update <bead> --label=pool:<rig>/polecat` (label all at once — controller handles deps) | ~~gc polecat spawn~~ / ~~--assignee=<rig>/polecat~~ / ~~manual sequencing~~ |
 | Stop my session | `{{ cmd }} agent drain {{ basename .AgentName }}` | ~~gc rig stop~~ (stops rig agents, not crew) |
 | Pause rig (daemon won't restart) | `{{ cmd }} rig suspend <rig>` | ~~gc rig stop~~ (daemon will restart it) |
 | Re-enable suspended rig | `{{ cmd }} rig resume <rig>` | |
