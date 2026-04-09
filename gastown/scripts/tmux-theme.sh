@@ -17,7 +17,12 @@ case "$AGENT" in
     */polecat|*--polecat)     role="polecat" ;;
     */witness|*--witness)     role="witness" ;;
     */refinery|*--refinery)   role="refinery" ;;
+    */pm|*--pm)               role="pm" ;;
+    */orchestrator|*--orchestrator) role="orchestrator" ;;
+    */architect|*--architect) role="architect" ;;
+    */product-researcher-*|*--product-researcher-*) role="researcher" ;;
     */crew/*|*--crew--*)      role="crew" ;;
+    */*)                      role="crew" ;;  # rig-scoped agents not otherwise matched = crew
     mayor)                    role="mayor" ;;
     deacon)                   role="deacon" ;;
     boot)                     role="boot" ;;
@@ -28,28 +33,36 @@ esac
 # ── Color theme (bg/fg) per role ────────────────────────────────────────
 # Matches the Go palette in internal/session/tmux/theme.go.
 case "$role" in
-    mayor)   bg="#3d3200" fg="#ffd700" ;;  # gold/dark
-    deacon)  bg="#2d1f3d" fg="#c0b0d0" ;;  # purple/silver
-    dog)     bg="#3d2f1f" fg="#d0c0a0" ;;  # brown/tan
-    witness) bg="#0d5c63" fg="#e0e0e0" ;;  # teal
-    refinery) bg="#4a5568" fg="#e0e0e0" ;; # slate
-    polecat) bg="#1e3a5f" fg="#e0e0e0" ;;  # ocean
-    crew)    bg="#2d5a3d" fg="#e0e0e0" ;;  # forest
-    boot)    bg="#1a1a2e" fg="#c0c0c0" ;;  # midnight
+    mayor)       bg="#3d3200" fg="#ffd700" ;;  # gold/dark
+    deacon)      bg="#2d1f3d" fg="#c0b0d0" ;;  # purple/silver
+    dog)         bg="#3d2f1f" fg="#d0c0a0" ;;  # brown/tan
+    witness)     bg="#0d5c63" fg="#e0e0e0" ;;  # teal
+    refinery)    bg="#4a5568" fg="#e0e0e0" ;;  # slate
+    polecat)     bg="#1e3a5f" fg="#e0e0e0" ;;  # ocean
+    crew)        bg="#2d5a3d" fg="#e0e0e0" ;;  # forest
+    boot)        bg="#1a1a2e" fg="#c0c0c0" ;;  # midnight
+    pm)          bg="#3d1f5a" fg="#e0c0f0" ;;  # violet
+    orchestrator) bg="#5a3d1f" fg="#f0d080" ;; # amber
+    architect)   bg="#1f3d5a" fg="#80c0f0" ;;  # navy
+    researcher)  bg="#1f5a3d" fg="#80f0c0" ;;  # emerald
     *)       bg="#4a5568" fg="#e0e0e0" ;;  # slate (default)
 esac
 
 # ── Role icon ───────────────────────────────────────────────────────────
 case "$role" in
-    mayor)   icon="🎩" ;;
-    deacon)  icon="🐺" ;;
-    witness) icon="🦉" ;;
-    refinery) icon="🏭" ;;
-    crew)    icon="👷" ;;
-    polecat) icon="😺" ;;
-    dog)     icon="🐕" ;;
-    boot)    icon="⚡" ;;
-    *)       icon="●" ;;
+    mayor)       icon="🎩" ;;
+    deacon)      icon="🐺" ;;
+    witness)     icon="🦉" ;;
+    refinery)    icon="🏭" ;;
+    crew)        icon="👷" ;;
+    polecat)     icon="😺" ;;
+    dog)         icon="🐕" ;;
+    boot)        icon="⚡" ;;
+    pm)          icon="📋" ;;
+    orchestrator) icon="🎯" ;;
+    architect)   icon="🏗" ;;
+    researcher)  icon="🔬" ;;
+    *)           icon="●" ;;
 esac
 
 # ── Apply theme ─────────────────────────────────────────────────────────

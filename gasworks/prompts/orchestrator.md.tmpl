@@ -190,20 +190,30 @@ When crew approves the plan, create child beads:
 PARENT="<bead-id>"
 
 # Phase 1 — example
-bd create "Set up Supabase project" \
+SETUP=$(bd create "Set up Supabase project" \
   --parent $PARENT -t task \
   --label needs-human \
-  -d "Provision Supabase project, capture connection strings, add to env config. MANUAL STEP — human required."
+  -d "Provision Supabase project, capture connection strings, add to env config. MANUAL STEP — human required." \
+  --json | jq -r '.id')
 
-bd create "Create database schema migrations" \
+MIGRATIONS=$(bd create "Create database schema migrations" \
   --parent $PARENT -t task \
-  -d "Implement migrations per architecture doc. Depends on: Supabase setup complete."
+  -d "Implement migrations per architecture doc." \
+  --json | jq -r '.id')
+
+# Wire dependencies — CRITICAL: syntax is `bd dep add CHILD PARENT`
+# Read as: "CHILD needs PARENT to be done first"
+# WRONG: bd dep add $SETUP $MIGRATIONS  (would mean setup needs migrations — backwards)
+# RIGHT: bd dep add $MIGRATIONS $SETUP  (migrations needs setup — correct)
+bd dep add $MIGRATIONS $SETUP
 
 # Label automated tasks for polecat pool
 bd list --parent $PARENT --status open --json | \
   jq -r '.[] | select(.labels | map(.name) | contains(["needs-human"]) | not) | .id' | \
   xargs -I {} bd update {} --label pool:{{.Rig}}/polecat
 ```
+
+**Dependency direction rule**: `bd dep add CHILD PARENT` — think "CHILD *needs* PARENT", not "PARENT *comes before* CHILD". Temporal language ("A before B", "Phase 1 then Phase 2") inverts the argument order. Always verify: `bd blocked <child-id>` should show the parent as a blocker.
 
 After creating all beads, mail crew + nudge with a summary of what was created.
 

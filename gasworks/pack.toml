@@ -22,6 +22,10 @@ prompt_template = "prompts/pm.md.tmpl"
 nudge = "Check your hook for PRD assignments."
 overlay_dir = "overlays/default"
 idle_timeout = "4h"
+session_live = [
+    "{{.ConfigDir}}/../gastown/scripts/tmux-theme.sh {{.Session}} {{.Agent}} {{.ConfigDir}}/../gastown",
+    "{{.ConfigDir}}/../gastown/scripts/tmux-keybindings.sh {{.ConfigDir}}/../gastown",
+]
 # gc sling encodes the target agent name with -- instead of / (e.g. gasworks--pm).
 # This sling_query corrects it before passing to bd.
 sling_query = "bd update {} --assignee=$(echo $GC_SLING_TARGET | sed 's|--|/|')"
@@ -35,6 +39,10 @@ prompt_template = "prompts/product-researcher.md.tmpl"
 nudge = "Check for research assignments."
 overlay_dir = "overlays/default"
 idle_timeout = "2h"
+session_live = [
+    "{{.ConfigDir}}/../gastown/scripts/tmux-theme.sh {{.Session}} {{.Agent}} {{.ConfigDir}}/../gastown",
+    "{{.ConfigDir}}/../gastown/scripts/tmux-keybindings.sh {{.ConfigDir}}/../gastown",
+]
 [agent.pool]
 min = 0
 max = 4
@@ -49,6 +57,10 @@ prompt_template = "prompts/architect.md.tmpl"
 nudge = "Check for architecture assignments."
 overlay_dir = "overlays/default"
 idle_timeout = "4h"
+session_live = [
+    "{{.ConfigDir}}/../gastown/scripts/tmux-theme.sh {{.Session}} {{.Agent}} {{.ConfigDir}}/../gastown",
+    "{{.ConfigDir}}/../gastown/scripts/tmux-keybindings.sh {{.ConfigDir}}/../gastown",
+]
 # gc sling encodes the target agent name with -- instead of / (e.g. gasworks--architect).
 # This sling_query corrects it before passing to bd.
 sling_query = "bd update {} --assignee=$(echo $GC_SLING_TARGET | sed 's|--|/|')"
@@ -62,6 +74,10 @@ prompt_template = "prompts/orchestrator.md.tmpl"
 nudge = "Check for project planning assignments."
 overlay_dir = "overlays/default"
 idle_timeout = "4h"
+session_live = [
+    "{{.ConfigDir}}/../gastown/scripts/tmux-theme.sh {{.Session}} {{.Agent}} {{.ConfigDir}}/../gastown",
+    "{{.ConfigDir}}/../gastown/scripts/tmux-keybindings.sh {{.ConfigDir}}/../gastown",
+]
 # gc sling encodes the target agent name with -- instead of / (e.g. gasworks--orchestrator).
 # This sling_query corrects it before passing to bd.
 sling_query = "bd update {} --assignee=$(echo $GC_SLING_TARGET | sed 's|--|/|')"
