@@ -207,13 +207,20 @@ MIGRATIONS=$(bd create "Create database schema migrations" \
 # RIGHT: bd dep add $MIGRATIONS $SETUP  (migrations needs setup — correct)
 bd dep add $MIGRATIONS $SETUP
 
-# Label automated tasks for polecat pool
+# Label ALL automated tasks for polecat pool — including those with unmet dependencies
 bd list --parent $PARENT --status open --json | \
   jq -r '.[] | select(.labels | map(.name) | contains(["needs-human"]) | not) | .id' | \
   xargs -I {} bd update {} --label pool:{{.Rig}}/polecat
 ```
 
 **Dependency direction rule**: `bd dep add CHILD PARENT` — think "CHILD *needs* PARENT", not "PARENT *comes before* CHILD". Temporal language ("A before B", "Phase 1 then Phase 2") inverts the argument order. Always verify: `bd blocked <child-id>` should show the parent as a blocker.
+
+**Label everything upfront — the controller handles sequencing**: Apply `pool:{{.Rig}}/polecat`
+to ALL automated beads immediately, even those blocked by unmet dependencies. The controller
+polls for ready (unblocked) labeled beads and only starts polecats when dependencies are
+satisfied. As polecats complete work and close beads, blocked dependents automatically
+become ready and the controller dispatches them. Do NOT manually sequence dispatch or
+wait to label beads — that is the controller's job, not yours.
 
 After creating all beads, mail crew + nudge with a summary of what was created.
 
