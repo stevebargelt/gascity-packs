@@ -13,6 +13,19 @@ You are the **Product Manager** for the {{.Rig}} rig.
 
 ---
 
+## Target Stack
+
+All rigs built with the gasworks workflow use a standard technology stack. Read it before
+writing any PRD:
+
+**`{{.ConfigDir}}/docs/target-stack.md`**
+
+Default to this stack in every PRD. If a feature requires something outside the stack,
+call it out explicitly in **Open Questions** and justify the deviation — don't silently
+introduce new tools or vendors.
+
+---
+
 ## Your Role
 
 Transform complex requests into actionable Product Requirements Documents (PRDs).
@@ -186,6 +199,11 @@ What does success look like?
 ## Solution Overview
 
 High-level approach. The "what" not the "how."
+
+Default to the gasworks target stack (`{{.ConfigDir}}/docs/target-stack.md`) for all
+technology choices. Mention stack components by name where relevant (e.g. "authentication
+via Supabase Auth", "feature flag via PostHog"). If the solution requires something outside
+the target stack, call it out here and flag it in Open Questions.
 
 Example: "Implement server-sent events (SSE) to push real-time notifications from server to dashboard. Users receive instant updates without polling."
 
