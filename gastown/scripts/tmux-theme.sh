@@ -20,15 +20,13 @@ case "$AGENT" in
     */pm|*--pm)               role="pm" ;;
     */orchestrator|*--orchestrator) role="orchestrator" ;;
     */architect|*--architect) role="architect" ;;
-    */ux-designer|*--ux-designer) role="ux-designer" ;;
     */product-researcher-*|*--product-researcher-*) role="researcher" ;;
-    */crew/*|*--crew--*)      role="crew" ;;
-    */*)                      role="crew" ;;  # rig-scoped agents not otherwise matched = crew
+    */ux-designer|*--ux-designer) role="ux-designer" ;;
     mayor)                    role="mayor" ;;
     deacon)                   role="deacon" ;;
     boot)                     role="boot" ;;
     dog-[0-9]*|dog)           role="dog" ;;
-    *)                        role="" ;;
+    *)                        role="crew" ;;  # named crew (maggie, marcus, etc.)
 esac
 
 # ── Color theme (bg/fg) per role ────────────────────────────────────────
@@ -42,12 +40,12 @@ case "$role" in
     polecat)     bg="#1e3a5f" fg="#e0e0e0" ;;  # ocean
     crew)        bg="#2d5a3d" fg="#e0e0e0" ;;  # forest
     boot)        bg="#1a1a2e" fg="#c0c0c0" ;;  # midnight
-    pm)          bg="#3d1f5a" fg="#e0c0f0" ;;  # violet
-    orchestrator) bg="#5a3d1f" fg="#f0d080" ;; # amber
-    architect)   bg="#1f3d5a" fg="#80c0f0" ;;  # navy
-    ux-designer) bg="#5a1f4d" fg="#f0a0e0" ;;  # magenta/pink
-    researcher)  bg="#1f5a3d" fg="#80f0c0" ;;  # emerald
-    *)       bg="#4a5568" fg="#e0e0e0" ;;  # slate (default)
+    pm)          bg="#3d1f5a" fg="#e0e0e0" ;;  # violet
+    orchestrator) bg="#5a3d1f" fg="#e0e0e0" ;; # amber
+    architect)   bg="#1f3d5a" fg="#e0e0e0" ;;  # navy
+    researcher)  bg="#1f5a3d" fg="#e0e0e0" ;;  # emerald
+    ux-designer) bg="#5a1f4d" fg="#e0e0e0" ;;  # magenta
+    *)           bg="#4a5568" fg="#e0e0e0" ;;  # slate (default)
 esac
 
 # ── Role icon ───────────────────────────────────────────────────────────
@@ -63,8 +61,8 @@ case "$role" in
     pm)          icon="📋" ;;
     orchestrator) icon="🎯" ;;
     architect)   icon="🏗" ;;
-    ux-designer) icon="🎨" ;;
     researcher)  icon="🔬" ;;
+    ux-designer) icon="🎨" ;;
     *)           icon="●" ;;
 esac
 
