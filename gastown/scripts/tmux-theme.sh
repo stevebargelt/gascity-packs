@@ -20,6 +20,7 @@ case "$AGENT" in
     */pm|*--pm)               role="pm" ;;
     */orchestrator|*--orchestrator) role="orchestrator" ;;
     */architect|*--architect) role="architect" ;;
+    */ux-designer|*--ux-designer) role="ux-designer" ;;
     */product-researcher-*|*--product-researcher-*) role="researcher" ;;
     */crew/*|*--crew--*)      role="crew" ;;
     */*)                      role="crew" ;;  # rig-scoped agents not otherwise matched = crew
@@ -44,6 +45,7 @@ case "$role" in
     pm)          bg="#3d1f5a" fg="#e0c0f0" ;;  # violet
     orchestrator) bg="#5a3d1f" fg="#f0d080" ;; # amber
     architect)   bg="#1f3d5a" fg="#80c0f0" ;;  # navy
+    ux-designer) bg="#5a1f4d" fg="#f0a0e0" ;;  # magenta/pink
     researcher)  bg="#1f5a3d" fg="#80f0c0" ;;  # emerald
     *)       bg="#4a5568" fg="#e0e0e0" ;;  # slate (default)
 esac
@@ -61,6 +63,7 @@ case "$role" in
     pm)          icon="📋" ;;
     orchestrator) icon="🎯" ;;
     architect)   icon="🏗" ;;
+    ux-designer) icon="🎨" ;;
     researcher)  icon="🔬" ;;
     *)           icon="●" ;;
 esac

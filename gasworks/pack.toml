@@ -66,6 +66,21 @@ session_live = [
 # This sling_query corrects it before passing to bd.
 sling_query = "bd update {} --assignee=$(echo $GC_SLING_TARGET | sed 's|--|/|')"
 
+# ── UX DESIGNER — Elicitation, user flows, wireframes, design system ──
+[[agent]]
+name = "ux-designer"
+scope = "rig"
+work_dir = ".gc/agents/{{.Rig}}/ux-designer"
+prompt_template = "prompts/ux-designer.md.tmpl"
+nudge = "Check for UX design assignments."
+overlay_dir = "overlays/default"
+idle_timeout = "4h"
+session_live = [
+    "{{.ConfigDir}}/../gastown/scripts/tmux-theme.sh {{.Session}} {{.Agent}} {{.ConfigDir}}/../gastown",
+    "{{.ConfigDir}}/../gastown/scripts/tmux-keybindings.sh {{.ConfigDir}}/../gastown",
+]
+sling_query = "bd update {} --assignee=$(echo $GC_SLING_TARGET | sed 's|--|/|')"
+
 # ── PROJECT ORCHESTRATOR — Phased planning and bead backlog creation ──
 [[agent]]
 name = "orchestrator"
