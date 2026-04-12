@@ -22,6 +22,7 @@ case "$AGENT" in
     */architect|*--architect) role="architect" ;;
     */product-researcher-*|*--product-researcher-*) role="researcher" ;;
     */ux-designer|*--ux-designer) role="ux-designer" ;;
+    */staff-engineer|*--staff-engineer) role="staff-engineer" ;;
     mayor)                    role="mayor" ;;
     deacon)                   role="deacon" ;;
     boot)                     role="boot" ;;
@@ -44,7 +45,8 @@ case "$role" in
     orchestrator) bg="#5a3d1f" fg="#e0e0e0" ;; # amber
     architect)   bg="#1f3d5a" fg="#e0e0e0" ;;  # navy
     researcher)  bg="#1f5a3d" fg="#e0e0e0" ;;  # emerald
-    ux-designer) bg="#5a1f4d" fg="#e0e0e0" ;;  # magenta
+    ux-designer)     bg="#5a1f4d" fg="#e0e0e0" ;;  # magenta
+    staff-engineer)  bg="#1f4a5a" fg="#e0e0e0" ;;  # steel blue
     *)           bg="#4a5568" fg="#e0e0e0" ;;  # slate (default)
 esac
 
@@ -62,7 +64,8 @@ case "$role" in
     orchestrator) icon="🎯" ;;
     architect)   icon="🏗" ;;
     researcher)  icon="🔬" ;;
-    ux-designer) icon="🎨" ;;
+    ux-designer)    icon="🎨" ;;
+    staff-engineer) icon="🔧" ;;
     *)           icon="●" ;;
 esac
 

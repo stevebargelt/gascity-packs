@@ -81,6 +81,24 @@ session_live = [
 ]
 sling_query = "bd update {} --assignee=$(echo $GC_SLING_TARGET | sed 's|--|/|')"
 
+# ── STAFF ENGINEER — Persistent rig-level technical partner. One per rig. ──
+[[agent]]
+name = "staff-engineer"
+scope = "rig"
+work_dir = ".gc/worktrees/{{.Rig}}/staff-engineer"
+prompt_template = "prompts/staff-engineer.md.tmpl"
+nudge = "Check mail and orient yourself to the current rig state."
+overlay_dir = "overlays/default"
+min_active_sessions = 1
+max_active_sessions = 1
+pre_start = ["{{.ConfigDir}}/../gastown/scripts/worktree-setup.sh {{.RigRoot}} {{.WorkDir}} staff-engineer --sync"]
+session_live = [
+    "{{.ConfigDir}}/../gastown/scripts/tmux-theme.sh {{.Session}} {{.Agent}} {{.ConfigDir}}/../gastown",
+    "{{.ConfigDir}}/../gastown/scripts/tmux-keybindings.sh {{.ConfigDir}}/../gastown",
+]
+[agent.option_defaults]
+model = "claude-opus-4-6"
+
 # ── PROJECT ORCHESTRATOR — Phased planning and bead backlog creation ──
 [[agent]]
 name = "orchestrator"
